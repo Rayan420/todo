@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TaskCard extends StatelessWidget {
-  const TaskCard(
+   const TaskCard(
       {Key? key, required this.color, required this.title, required this.desc})
       : super(key: key);
 
