@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TaskCard extends StatelessWidget {
-   const TaskCard(
+class TaskListCard extends StatelessWidget {
+   const TaskListCard(
       {Key? key, required this.color, required this.title, required this.desc})
       : super(key: key);
 
@@ -25,19 +25,10 @@ class TaskCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // icon button in stack to remove a unwanted task list
-          Positioned(
-            bottom: -14.0,
-            right: -14.0,
-            child: IconButton(
-              onPressed: null,
-              icon: Icon(Icons.remove_circle_outline, color: Colors.black,),
-            ),
-          ),
           Column(
             children: [
               Text(
-                title ?? "Unnamed Task",
+                title ?? "Unnamed List",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 19,
