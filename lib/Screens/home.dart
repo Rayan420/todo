@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:todo/Components/Constants/constants.dart';
+import 'package:todo/DataBase/Db_connection.dart';
 import 'package:todo/Models/greeting_model.dart';
 import '../Components/Widgets/greeting.dart';
 import '../Components/Widgets/positioned_button.dart';
-import '../Components/Widgets/scroll_glow_behaviour.dart';
+//import '../Components/Widgets/scroll_glow_behaviour.dart';
 import '../Components/Widgets/task_list_card.dart';
+import '../Models/task.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -17,83 +19,66 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var greetingmodel = GreetingModel();
+  DatabaseConnection _db = DatabaseConnection();
 
+  // a function to set the color of the task list cards
+  // based on id, if even set pink, odd is blue
+  Color cardColor(AsyncSnapshot<List<Task>> snapshot, int index)
+  {
+    if(snapshot.data![index].id!.isEven)
+      {
+        return Kcolors.kPrimaryCardColor;
+      }
+    else
+      return Kcolors.kSecondaryCardColor;
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-          height: MediaQuery.of(context).size.height,
-          width: double.infinity,
-          child: Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // adjust the greeting text and set dynamic functionality
-                  Container(
-                    padding: EdgeInsets.only(bottom: 32),
-                    child: Greeting(
-                      icon: greetingmodel.getGreetingIcon(),
-                      greeting: greetingmodel.getGreetingText(),
-                    ),
-                  ),
-                  Container(
-                    height: 270,
-                    child: ScrollConfiguration(
-                      behavior: NoScrollGlowBehaviour(),
-                      child: ListView(
-
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          TaskListCard(
-                            color: Kcolors.kPrimaryCardColor,
-                            title: "My First Task",
-                            desc:
-                                "Hello User ! Welcome to TODO, this is your first task list that you can delete or edit and get started using the app",
-                          ),
-                          TaskListCard(
-                            color: Kcolors.kSecondaryCardColor,
-                            title: null,
-                            desc: null,
-                          ),
-                          TaskListCard(
-                            color: Kcolors.kPrimaryCardColor,
-                            title: "My First Task",
-                            desc:
-                                "Hello User ! Welcome to TODO, this is your first task list that you can delete or edit and get started using the app",
-                          ),
-                          TaskListCard(
-                            color: Kcolors.kSecondaryCardColor,
-                            title: null,
-                            desc: null,
-                          ),
-                          TaskListCard(
-                            color: Kcolors.kPrimaryCardColor,
-                            title: "My First Task",
-                            desc:
-                                "Hello User ! Welcome to TODO, this is your first task list that you can delete or edit and get started using the app",
-                          ),
-                          TaskListCard(
-                            color: Kcolors.kSecondaryCardColor,
-                            title: null,
-                            desc: null,
-                          ),
-                          TaskListCard(
-                            color: Kcolors.kPrimaryCardColor,
-                            title: "My First Task",
-                            desc:
-                                "Hello User ! Welcome to TODO, this is your first task list that you can delete or edit and get started using the app",
-                          ),
-                        ],
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+            height: MediaQuery.of(context).size.height,
+            width: double.infinity,
+            child: Stack(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(bottom: 32),
+                      child: Greeting(
+                        icon: greetingmodel.getGreetingIcon(),
+                        greeting: greetingmodel.getGreetingText(),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              PositionedButton(icon: Icons.add, onClick: () {Navigator.pushNamed(context, '/second');  },),
-            ],
+                    Expanded(
+                      child: FutureBuilder(
+                        future: _db.getTask(),
+                        builder: (context, AsyncSnapshot<List<Task>> snapshot) {
+                          return ListView.builder(
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                return TaskListCard(
+                                    color: cardColor(snapshot, index),
+                                    title: snapshot.data![index].title,
+                                    desc: snapshot.data![index].desc);
+                              });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                PositionedButton(
+                  icon: Icons.add,
+                  onClick: () {
+                    Navigator.pushNamed(context, '/second');
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

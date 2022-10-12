@@ -12,13 +12,13 @@ class TaskListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
-      height: 200,
+      width: 180,
+      height: 180,
       padding: const EdgeInsets.symmetric(
         vertical: 32.0,
         horizontal: 24.0,
       ),
-      margin: const EdgeInsets.only(right: 20),
+      margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: color,
@@ -26,12 +26,13 @@ class TaskListCard extends StatelessWidget {
       child: Stack(
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title ?? "Unnamed List",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 19,
+                  fontSize: 25,
                 ),
               ),
               const Padding(
@@ -41,7 +42,7 @@ class TaskListCard extends StatelessWidget {
                 desc ?? "No Description",
                 style: const TextStyle(
                   height: 1.5,
-                  fontSize: 16,
+                  fontSize: 18,
                 ),
               )
             ],
