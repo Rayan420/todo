@@ -19,7 +19,7 @@ class GreetingModel
   {
     if(_now.hour ==24 || _now.hour<12)
     {
-      return const Text("Good Morning", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),);
+      return const Text("Good Morning", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,),);
     }
     else {
       return const Text("Good Evening", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),);
